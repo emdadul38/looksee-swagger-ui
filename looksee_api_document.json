@@ -1,0 +1,679 @@
+{
+    "swagger":"2.0",
+    "info":{
+        "description":"Looksee! A social-productivity app that allows you to delegate tasks, set reminders and exchange favors in the simplest way possible!.",
+        "version":"1.0.0",
+        "title":"Looksee API",
+        "termsOfService":"https://www.reallifeapp.com/looksee",
+        "contact":{
+            "email":"applooksee@gmail.com"
+        },
+        "license":{
+            "name":"Apache 2.0",
+            "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "host":"server.applooksee.com",
+    "basePath":"/v1",
+    "tags":[
+        {
+            "name":"user",
+            "description":"Everything about user"            
+		},
+		{
+            "name":"otp",
+            "description":"Everything about OTP"            
+		},
+		{
+            "name":"contact",
+            "description":"Everything about contact information"            
+		},
+		{
+            "name":"block",
+            "description":"Everything about block contacts"            
+		},
+		{
+            "name":"group",
+            "description":"Everything about group contacts"            
+		},
+		{
+            "name":"looksee",
+            "description":"Everything about looksee"            
+		},
+		{
+            "name":"custom_offer",
+            "description":"Everything about custom offer"            
+		},
+		{
+            "name":"recurring",
+            "description":"Everything about recurring looksee"            
+		},
+		{
+            "name":"sync",
+            "description":"Everything about sync api"            
+		},
+		{
+            "name":"subscription",
+            "description":"Everything about subscription"            
+		},
+		{
+            "name":"others",
+            "description":"Everything about badge and config"            
+		},
+		{
+            "name":"chatting",
+            "description":"Everything about chatting"            
+		}
+    ],
+    "schemes":[
+        "https",
+        "http"
+    ],
+    "paths":{
+        "/signup":{
+            "post":{
+                "tags":[
+                    "user"
+                ],
+                "summary": "Signup the user",
+				"description": "",
+				"operationId": "Signup",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+				{
+					"in": "body",
+					"name": "body",
+					"description": "User object that needs to be added to the store or checked the data",
+					"required": true,
+					"schema": {
+						"$ref": "#/definitions/Signup"
+					}
+				}
+				],
+				"responses": {
+					"405": {
+						"description": "Invalid input"
+					}
+				}
+            }
+        },
+        "/setup_profile":{
+            "put": {
+				"tags": [
+				  "user"
+				],
+				"summary": "Update an user information",
+				"description": "",
+				"operationId": "updateUser",
+				"consumes": [
+				  "application/json"
+				],
+				"produces": [
+				  "application/json"
+				],
+				"parameters": [
+				  {
+					"in": "body",
+					"name": "body",
+					"description": "User object that needs to be added to the store",
+					"required": true,
+					"schema": {
+					  "$ref": "#/definitions/SetupProfile"
+					}
+				  }
+				],
+				"responses": {
+				  "400": {
+					"description": "Invalid input data supplied"
+				  },
+				  "404": {
+					"description": "User not found"
+				  },
+				  "405": {
+					"description": "Validation exception"
+				  }
+				}
+			}
+        },
+        "/update_profile":{
+            "put":{
+                "tags":[
+                    "user"
+                ],
+                "summary":"Updated profile information",
+                "description":"",
+                "operationId":"userId",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+					{
+						"in":"body",
+						"name":"body",
+						"description":"Updated user object",
+						"required":true,
+						"schema":{
+							"$ref":"#/definitions/UpdateProfile"
+						}
+					}
+				],
+				"responses":{
+					"400":{
+						"description":"Invalid user data"
+					},
+					"404":{
+						"description":"User not found"
+					}
+				}
+            }
+        },        
+        "/remove_user?{user_id}":{
+            "delete":{
+				"tags":[
+					"user"
+				],
+				"summary":"Delete user",
+				"description":"This can only be done by the logged in user.",
+				"operationId":"deleteUser",
+				"produces":[
+					"application/json"
+				],
+				"parameters":[
+					{
+						"name":"user_id",
+						"in":"query",
+						"description":"The user_id that needs to be deleted",
+						"required":true,
+						"type":"string"
+					}
+				],
+				"responses":{
+					"200":{
+						"description": "User account has been removed"
+					},
+					"400":{
+						"description":"Invalid user_id supplied"
+					},
+					"404":{
+						"description":"User not found"
+					}
+				}
+			}
+        },
+        "/logout":{
+            "get":{
+                "tags":[
+                    "user"
+                ],
+                "summary":"Logs out current logged in user session",
+                "description":"",
+                "operationId":"logoutUser",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                ],
+                "responses":{
+                    "200":{
+                        "description":"successful operation",
+                        "schema":{
+                            "$ref":"#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/close_account":{
+            "get":{
+				"tags":[
+					"user"
+				],
+				"summary":"Closed the user account",
+				"description":"",
+				"operationId":"closeUserAccount",
+				"produces":[
+					"application/json"
+				],
+				"parameters":[
+				],
+				"responses":{
+					"200":{
+						"description":"successful operation",
+						"schema":{
+							"$ref":"#/definitions/User"
+						}
+					},
+					"400":{
+						"description":"Invalid username supplied"
+					},
+					"404":{
+						"description":"User not found"
+					}
+				}
+			}
+        },
+        "/update_fcm_token":{
+            "put":{
+                "tags":[
+                    "user"
+                ],
+                "summary":"Updated fcm token",
+                "description":"This can only be used by the logged in user.",
+                "operationId":"updateFCMToken",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"body",
+                        "name":"body",
+                        "description":"Updated user object",
+                        "required":true,
+                        "schema":{
+                            "$ref":"#/definitions/UpdateFCM"
+                        }
+                    }
+                ],
+                "responses":{
+					"200": {
+						"description":"User FCM Token updated"
+					},
+                    "400":{
+                        "description":"Invalid Input"
+                    },
+                    "404":{
+                        "description":"User not found"
+                    }
+                }
+            }
+		},
+		"/delete_fcm_token":{
+            "put":{
+                "tags":[
+                    "user"
+                ],
+                "summary":"Delete FCM token from user's device",
+                "description":"This can only be done by the logged in user.",
+                "operationId":"deleteFCMToken",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                    {
+                        "in":"body",
+                        "name":"body",
+                        "description":"Updated user device object",
+                        "required":true,
+                        "schema":{
+                            "$ref":"#/definitions/User"
+                        }
+                    }
+                ],
+                "responses":{
+					"200":{
+						"description":"successful operation",
+						"schema":{
+							"type": "array",
+							"items": {
+								"$ref":"#/definitions/userDeviceInfo"
+							}
+						}
+					},
+                    "400":{
+                        "description":"Invalid user supplied"
+                    },
+                    "404":{
+                        "description":"User not found"
+                    }
+                }
+            }
+		},
+		"/premium_info":{
+            "get":{
+                "tags":[
+                    "user"
+                ],
+                "summary":"Get premium info",
+                "description":"",
+                "operationId":"premiumInfo",
+                "produces":[
+                    "application/json"
+                ],
+                "parameters":[
+                ],
+                "responses":{
+                    "200":{
+                        "description":"successful operation",
+                        "schema":{
+                            "$ref":"#/definitions/PremiumInfo"
+                        }
+                    },
+                    "404":{
+                        "description":"User not found"
+                    }
+                }
+			}
+		},
+		"/check_otp?{user_id}&{pin}":{
+			"get":{
+				"tags":[
+					"otp"
+				],
+				"summary":"checked otp using user_id and pin",
+				"description":"",
+				"operationId":"checkOTP",
+				"produces":[
+					"application/json"
+				],
+				"parameters":[
+					{
+						"name":"user_id",
+						"in":"query",
+						"description":"The user_id that needs to be identify the user. ",
+						"required":true,
+						"type":"string",
+						"allowReserved": true
+					},
+					{
+						"name":"pin",
+						"in":"query",
+						"description":"The pin that needs to be matched of the user. ",
+						"required":true,
+						"type":"number",
+						"allowReserved": true
+					}
+				],
+				"responses":{
+					"200":{
+						"description":"successful operation",
+						"matching_code": "true"
+					},
+					"400":{
+						"description":"Invalid user_id and pin"
+					},
+					"404":{
+						"description":"User not found"
+					}
+				}
+			}
+		},
+		"/resend_sms_otp":{
+			"put":{
+				"tags":[
+					"otp"
+				],
+				"summary":"Resend the OTP",
+				"description":"This can only be done by the logged in user.",
+				"operationId":"updateOTP",
+				"produces":[
+					"application/xml",
+					"application/json"
+				],
+				"parameters":[
+					{
+						"in":"body",
+						"name":"body",
+						"description":"List of user object",
+						"required":true,
+						"type":"string"
+					}
+				],
+				"responses":{
+					"200":{
+						"description":"successful operation",
+						"schema":{							
+							"$ref":"#/definitions/resendSMSOTP"							
+						}
+
+					},
+					"400":{
+						"description":"Invalid mobile_no supplied"
+					},
+					"404":{
+						"description":"User not found"
+					}
+				}
+			}
+		}
+    },
+    "securityDefinitions":{
+        "api_key":{
+            "type":"apiKey",
+            "name":"api_key",
+            "in":"header"
+        }
+    },
+    "definitions":{
+        "User":{
+            "type":"object",
+            "properties":{
+                "id":{
+                    "type":"integer",
+                    "format":"int64"
+                },
+                "username":{
+                    "type":"string"
+                },
+                "firstName":{
+                    "type":"string"
+                },
+                "lastName":{
+                    "type":"string"
+                },
+                "email":{
+                    "type":"string"
+                },
+                "password":{
+                    "type":"string"
+                },
+                "phone":{
+                    "type":"string"
+                },
+                "userStatus":{
+                    "type":"integer",
+                    "format":"int32",
+                    "description":"User Status"
+                }
+            },
+            "xml":{
+                "name":"User"
+            }
+        },
+        "Signup":{
+            "type":"object",
+            "required":[
+                "mobile_no",
+				"country_name",
+				"os_name",
+				"os_version",
+				"device_manufacturer",
+				"device_model",
+				"model_no",
+				"device_id"
+            ],
+            "properties":{
+                "mobile_no":{
+                    "type":"string",
+                    "format":"+13474884543"
+                },
+                "country_name":{
+                    "type":"string",
+                    "example":"United States"
+				},
+				"os_name":{
+                    "type":"string",
+                    "example":"ios"
+				},
+				"os_version":{
+                    "type":"string",
+                    "example":"14.3"
+				},
+				"device_manufacturer":{
+                    "type":"string",
+                    "example":"Apple"
+				},
+				"device_model":{
+                    "type":"string",
+                    "example":"iPhone11,2"
+				},
+				"model_no":{
+                    "type":"string",
+                    "example":"iPhone"
+				},
+				"device_id":{
+                    "type":"string",
+                    "example":"9997992ede064dfd8d33c1984d2f55a4"
+                }
+            }
+		},
+		"SetupProfile":{
+            "type":"object",
+            "required":[
+				"name",
+				"profile_photo_url",
+				"passcode",
+				"user_id"
+            ],
+            "properties":{
+                "email":{
+                    "type":"string",
+                    "example":""
+                },
+                "name":{
+                    "type":"string",
+                    "example":"Mr. John Doe"
+				},
+				"gender":{
+                    "type":"string",
+                    "example":"nil"
+				},
+				"profile_photo_url":{
+                    "type":"string",
+                    "example":"https://s3.us-east-1.amazonaws.com/looksee-production/4566dbc6-c40.jpeg"
+				},
+				"passcode":{
+                    "type":"int32",
+                    "example":0
+				},
+				"user_id":{
+                    "type":"string",
+                    "example":"5ffbbc3b000f8263af61b340"
+				}
+            }
+		},
+		"UpdateProfile":{
+            "type":"object",
+            "required":[
+				"name",
+				"profile_photo_url",
+				"user_id"
+            ],
+            "properties":{
+                "name":{
+                    "type":"string",
+                    "example":"Mr. John Doe"
+				},
+				"profile_photo_url":{
+                    "type":"string",
+                    "example":"https://s3.us-east-1.amazonaws.com/looksee-production/4566dbc6-c40.jpeg"
+				},
+				"user_id":{
+                    "type":"string",
+                    "example":"5ffbbc3b000f8263af61b340"
+				}
+            }
+		},
+		"UpdateFCM": {
+			"type": "object",
+			"required": [
+				"fcm_token",
+				"device_id",
+				"user_id"
+			],
+			"properties":{
+                "fcm_token":{
+                    "type":"string",
+                    "example":"dSeo37TuPEIVt2RpcHq7lL:APA91bGPxDLpUsAqcTDZe0vgu_zlmRtA******"
+				},
+				"device_id":{
+                    "type":"string",
+                    "example":"9997992ede064dfd8d33c1984d2f55a4"
+				},
+				"user_id":{
+                    "type":"string",
+                    "example":"5ffbbc3b000f8263af61b340"
+				}
+            }
+		},
+		"userDeviceInfo": {
+			"type": "object",
+			"properties": {
+				"fcm_token":{
+					"type":"string",
+					"example":"dSeo37TuPEIVt2RpcHq7lL:APA91bGPxDLpUsAqcTDZe0vgu_zlmRtA******"
+				},
+				"os_name":{
+					"type":"string",
+					"example":"ios"
+				},
+				"os_version":{
+					"type":"string",
+					"example":"14.3"
+				},
+				"device_manufacturer":{
+					"type":"string",
+					"example":"Apple"
+				},
+				"device_model":{
+					"type":"string",
+					"example":"iPhone11,2"
+				},
+				"model_no":{
+					"type":"string",
+					"example":"iPhone"
+				},
+				"device_id":{
+					"type":"string",
+					"example":"9997992ede064dfd8d33c1984d2f55a4"
+				}
+			}
+		},
+		"resendSMSOTP" : {
+			"type": "object",
+			"properties": {
+				"status": {
+					"type": "boolean",
+					"example": "true"
+				},
+				"sms_count":{
+					"type":"number",
+					"example":"2"
+				},
+				"sms_pin":{
+					"type":"array",
+					"example":"[5555, 3215]"
+				}
+			}
+		},
+        "ApiResponse":{
+            "type":"object",
+            "properties":{
+                "code":{
+                    "type":"integer",
+                    "format":"int32"
+                },
+                "type":{
+                    "type":"string"
+                },
+                "message":{
+                    "type":"string"
+                }
+            }
+        }
+	}	
+}
